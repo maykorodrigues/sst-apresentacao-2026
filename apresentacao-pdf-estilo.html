@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apresentação Sucesso do Cliente — SST Card</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            line-height: 1.6;
+        }
+
+        .page {
+            width: 210mm;
+            height: 297mm;
+            margin: 20px auto;
+            padding: 40px;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            page-break-after: always;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media print {
+            body { background: white; margin: 0; }
+            .page { margin: 0; box-shadow: none; page-break-after: always; }
+        }
+
+        /* ===== CAPA ===== */
+        .capa {
+            background: linear-gradient(135deg, #1987c3 0%, #0d4a8f 100%);
+            color: white;
+            text-align: center;
+            justify-content: center;
+        }
+
+        .capa h1 {
+            font-size: 3.5em;
+            margin-bottom: 0.5em;
+            font-weight: 700;
+        }
+
+        .capa .subtitulo {
+            font-size: 1.8em;
+            margin-bottom: 2em;
+            opacity: 0.9;
+        }
+
+        .capa .data {
+            font-size: 1.2em;
+            margin-top: 3em;
+            opacity: 0.7;
+        }
+
+        /* ===== SEÇÕES ===== */
+        .secao h1 {
+            font-size: 2.5em;
+            color: #1987c3;
+            margin-bottom: 0.8em;
+            border-bottom: 4px solid #1987c3;
+            padding-bottom: 0.5em;
+        }
+
+        .secao h2 {
+            font-size: 1.5em;
+            color: #333;
+            margin-top: 1.5em;
+            margin-bottom: 0.8em;
+        }
+
+        .secao h3 {
+            font-size: 1.2em;
+            color: #555;
+            margin-top: 1em;
+            margin-bottom: 0.5em;
+        }
+
+        .secao p {
+            font-size: 1em;
+            color: #666;
+            margin-bottom: 0.8em;
+        }
+
+        .secao ul {
+            margin-left: 2em;
+            margin-bottom: 1em;
+        }
+
+        .secao li {
+            margin-bottom: 0.6em;
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        /* ===== CARDS DASHBOARD ===== */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5em;
+            margin-bottom: 1em;
+        }
+
+        .card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+            padding: 1.5em;
+            border-radius: 8px;
+            border-left: 5px solid #1987c3;
+        }
+
+        .card.green { border-left-color: #2ecc71; }
+        .card.orange { border-left-color: #f39c12; }
+        .card.red { border-left-color: #e74c3c; }
+
+        .card-numero {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #1987c3;
+            margin-bottom: 0.3em;
+        }
+
+        .card-label {
+            font-size: 0.95em;
+            color: #666;
+            font-weight: 600;
+        }
+
+        /* ===== TABELAS ===== */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5em;
+            font-size: 0.9em;
+        }
+
+        table thead {
+            background: #1987c3;
+            color: white;
+        }
+
+        table th, table td {
+            padding: 0.8em;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table tbody tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        table tbody tr:hover {
+            background: #f0f0f0;
+        }
+
+        /* ===== LISTAS CUSTOMIZADAS ===== */
+        .bullet-list li {
+            list-style: none;
+            padding-left: 2em;
+            position: relative;
+        }
+
+        .bullet-list li:before {
+            content: "▸";
+            color: #1987c3;
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        .error-list li:before {
+            content: "✕";
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        .check-list li:before {
+            content: "✓";
+            color: #2ecc71;
+            font-weight: bold;
+        }
+
+        /* ===== CHART CONTAINERS ===== */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            margin: 2em 0;
+        }
+
+        .chart-horizontal {
+            height: 300px;
+        }
+
+        /* ===== BOXES DE ÊNFASE ===== */
+        .box-destaque {
+            background: #e3f2fd;
+            border-left: 5px solid #1987c3;
+            padding: 1.5em;
+            margin: 1.5em 0;
+            border-radius: 4px;
+        }
+
+        .box-destaque strong {
+            color: #1987c3;
+        }
+
+        .box-alerta {
+            background: #fff3cd;
+            border-left: 5px solid #f39c12;
+            padding: 1.5em;
+            margin: 1.5em 0;
+        }
+
+        .box-sucesso {
+            background: #d4edda;
+            border-left: 5px solid #2ecc71;
+            padding: 1.5em;
+            margin: 1.5em 0;
+        }
+
+        /* ===== RODAPÉ ===== */
+        .footer {
+            margin-top: auto;
+            padding-top: 1.5em;
+            border-top: 2px solid #ddd;
+            text-align: center;
+            color: #999;
+            font-size: 0.85em;
+        }
+
+        /* ===== ASSINATURA ===== */
+        .assinatura {
+            margin-top: 3em;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4em;
+        }
+
+        .assinatura-bloco {
+            border-top: 2px solid #333;
+            padding-top: 1.5em;
+            text-align: center;
+        }
+
+        .assinatura-nome {
+            font-weight: 700;
+            margin-top: 0.5em;
+            color: #333;
+        }
+
+        .assinatura-cargo {
+            font-size: 0.9em;
+            color: #999;
+            margin-top: 0.3em;
+        }
+    </style>
+</head>
+<body>
+
+<!-- PÁGINA 1: CAPA -->
+<div class="page capa">
+    <div>
+        <h1>📊 Sucesso do Cliente</h1>
+        <p class="subtitulo">Gestão de Churn & Retenção</p>
+        <p class="subtitulo" style="font-size: 1.2em; opacity: 0.8;">SST Card — Maio 2026</p>
+        <p class="data">Para: Rogério Ferreira (Sponsor)</p>
+        <p class="data">Apresentado por: Mayko Rodrigues (Consultor)</p>
+        <p class="data">Responsável: Lucas (Customer Success)</p>
+    </div>
+</div>
+
+<!-- PÁGINA 2: PROBLEMA CENTRAL -->
+<div class="page secao">
+    <h1>🎯 O Problema Central</h1>
+    <p style="font-size: 1.2em; color: #e74c3c; font-weight: 600;">Churn Descontrolado — Sem Visibilidade</p>
+
+    <div class="box-alerta">
+        <strong>Diagnóstico:</strong> 27 cancelamentos documentados, mas:<br>
+        • Motivos não mapeados — por que cancelaram?<br>
+        • Sem processo de retenção — ninguém tenta reverter<br>
+        • Reclamações dispersas — Recepção, Raquel, WhatsApp<br>
+        • Sem dono formal de Customer Success — Lucas será o primeiro<br>
+        • Possível churn oculto — 1.293 inativos = quanto de churn real?
+    </div>
+
+    <div class="box-destaque">
+        <strong>Impacto:</strong> Se não mapearmos agora, não sabemos se 30% da base está em risco de sair.
+    </div>
+</div>
+
+<!-- PÁGINA 3: DASHBOARD NÚMEROS -->
+<div class="page secao">
+    <h1>📊 Dashboard — Números Atuais</h1>
+
+    <div class="dashboard">
+        <div class="card">
+            <div class="card-numero">1.708</div>
+            <div class="card-label">Total de Contratos</div>
+        </div>
+        <div class="card green">
+            <div class="card-numero">415</div>
+            <div class="card-label">Membros Ativos</div>
+        </div>
+        <div class="card orange">
+            <div class="card-numero">1.293</div>
+            <div class="card-label">Inativos (Risco)</div>
+        </div>
+        <div class="card red">
+            <div class="card-numero">27</div>
+            <div class="card-label">Cancelamentos</div>
+        </div>
+    </div>
+
+    <div class="box-destaque">
+        <strong>Métrica-chave:</strong> Churn rate ≈ 6,5% (27 ÷ 415 ativos) — Acima do benchmark saudável (&lt;3%)
+    </div>
+</div>
+
+<!-- PÁGINA 4: GRÁFICO DISTRIBUIÇÃO -->
+<div class="page secao">
+    <h1>📈 Distribuição de Contratos</h1>
+    <div class="chart-container">
+        <canvas id="chart-pizza"></canvas>
+    </div>
+</div>
+
+<!-- PÁGINA 5: EXEMPLO ELIANE -->
+<div class="page secao">
+    <h1>🔍 Exemplo: Eliane (Cancelada)</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Campo</th>
+                <th>Valor</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Nome</strong></td>
+                <td>Eliane</td>
+            </tr>
+            <tr>
+                <td><strong>Tempo de permanência</strong></td>
+                <td>10 meses</td>
+            </tr>
+            <tr>
+                <td><strong>Data de cancelamento</strong></td>
+                <td>Junho/2025</td>
+            </tr>
+            <tr>
+                <td><strong>Motivo informado</strong></td>
+                <td>Mudança de cidade (São Paulo → Interior)</td>
+            </tr>
+            <tr>
+                <td><strong>Reversibilidade</strong></td>
+                <td>❌ Baixa (mudança geográfica permanente)</td>
+            </tr>
+            <tr>
+                <td><strong>Ação de retenção</strong></td>
+                <td>❌ Nenhuma tentativa documentada</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="box-destaque">
+        <strong>Aprendizado:</strong> Mesmo cancelamentos "inevitáveis" precisam ser documentados. Podia oferecer: Telemedicina, Rede no interior, Transferência de plano.
+    </div>
+</div>
+
+<!-- PÁGINA 6: MOTIVOS CANCELAMENTO -->
+<div class="page secao">
+    <h1>🚩 Motivos de Cancelamento (Análise)</h1>
+    <div class="chart-container chart-horizontal">
+        <canvas id="chart-barras"></canvas>
+    </div>
+    <p style="text-align: center; margin-top: 1em; color: #999; font-size: 0.9em;">
+        Gráfico mostra reversibilidade de cada motivo (Reversível vs Permanente)
+    </p>
+</div>
+
+<!-- PÁGINA 7: PLANILHA CHURNING -->
+<div class="page secao">
+    <h1>📋 Estrutura de Planilha Churning</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Tempo (meses)</th>
+                <th>Motivo</th>
+                <th>Reversível?</th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Eliane</td>
+                <td>10</td>
+                <td>Mudança de cidade</td>
+                <td>❌ Não</td>
+                <td>Documentar + Telemedicina</td>
+            </tr>
+            <tr>
+                <td>João</td>
+                <td>3</td>
+                <td>Preço</td>
+                <td>✓ Sim</td>
+                <td>Oferecer desconto</td>
+            </tr>
+            <tr>
+                <td>Maria</td>
+                <td>5</td>
+                <td>Não usava</td>
+                <td>✓ Sim</td>
+                <td>Onboarding + call</td>
+            </tr>
+            <tr>
+                <td>[+24 casos...]</td>
+                <td>Variável</td>
+                <td>A mapear</td>
+                <td>A analisar</td>
+                <td>A definir</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="box-destaque">
+        <strong>Ação imediata:</strong> Lucas monta esta planilha com os 27 cancelamentos até 15/05.
+    </div>
+</div>
+
+<!-- PÁGINA 8: PROCESSO RETENÇÃO -->
+<div class="page secao">
+    <h1>☎️ Processo de Retenção (5 Etapas)</h1>
+
+    <div style="margin: 2em 0;">
+        <h3>1️⃣ DETECÇÃO (Inbound)</h3>
+        <p>Cliente liga/envia mensagem: "Quero cancelar"</p>
+        <p style="color: #999; margin-left: 2em; margin-top: 0.5em;">→ Roteado para Lucas (novo dono)</p>
+
+        <h3 style="margin-top: 1.5em;">2️⃣ TRIAGEM (5 min)</h3>
+        <p>Lucas coleta: Nome, Tempo de permanência, Motivo exato</p>
+        <p style="color: #999; margin-left: 2em; margin-top: 0.5em;">→ Classifica reversibilidade (Sim/Não/Talvez)</p>
+
+        <h3 style="margin-top: 1.5em;">3️⃣ RETENÇÃO (15 min)</h3>
+        <p>Se reversível: Oferta salva (desconto, upgrade, etc.)</p>
+        <p style="color: #999; margin-left: 2em; margin-top: 0.5em;">→ "Vamos resolver isso?"</p>
+
+        <h3 style="margin-top: 1.5em;">4️⃣ DECISÃO</h3>
+        <p><strong>Cenário A:</strong> Revertido → Documentar + Follow-up em D+7</p>
+        <p><strong>Cenário B:</strong> Cancelado → Registrar motivo + Pedir feedback</p>
+
+        <h3 style="margin-top: 1.5em;">5️⃣ REGISTRA NA PLANILHA</h3>
+        <p>Todos os dados vão para análise de padrões</p>
+    </div>
+</div>
+
+<!-- PÁGINA 9: RESPONSABILIDADES LUCAS -->
+<div class="page secao">
+    <h1>👤 Responsabilidades de Lucas (Customer Success)</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Função</th>
+                <th>Descrição</th>
+                <th>KPI</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Triagem de Churn</strong></td>
+                <td>Atender cancelamentos, coletar motivos</td>
+                <td>100% dos casos em 5 min</td>
+            </tr>
+            <tr>
+                <td><strong>Retenção Ativa</strong></td>
+                <td>Oferecer salva (desconto, benefício extra)</td>
+                <td>≥40% revertidos</td>
+            </tr>
+            <tr>
+                <td><strong>Documentação</strong></td>
+                <td>Preencher planilha de churning</td>
+                <td>0 casos perdidos</td>
+            </tr>
+            <tr>
+                <td><strong>Follow-up</strong></td>
+                <td>Acompanhar reativados em D+7</td>
+                <td>Sem novo churn na retenção</td>
+            </tr>
+            <tr>
+                <td><strong>Relatório Semanal</strong></td>
+                <td>Enviar análise de motivos + taxa</td>
+                <td>Toda segunda-feira 9h</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="box-sucesso">
+        <strong>Autoridade:</strong> Lucas pode aprovar descontos até R$50/mês sem aviso prévio (acima disso, pede Rogério).
+    </div>
+</div>
+
+<!-- PÁGINA 10: KPIs RADAR -->
+<div class="page secao">
+    <h1>📈 Dashboard de KPIs (Sucesso do Cliente)</h1>
+    <div class="chart-container">
+        <canvas id="chart-radar"></canvas>
+    </div>
+    <p style="text-align: center; margin-top: 1em; color: #999; font-size: 0.9em;">
+        Meta: todos os indicadores em verde (≥80% da meta)
+    </p>
+</div>
+
+<!-- PÁGINA 11: PRÓXIMOS PASSOS -->
+<div class="page secao">
+    <h1>🚀 Próximos Passos (24-72h)</h1>
+
+    <h3 style="margin-top: 1.5em;">📅 Semana 1 (17-23 de Maio)</h3>
+    <ul class="bullet-list">
+        <li><strong>Seg 17:</strong> Lucas recebe briefing + template de planilha</li>
+        <li><strong>Ter 18:</strong> Primeira retenção testada (call 15 min)</li>
+        <li><strong>Qua 19-Sex 23:</strong> Lucas reúne dados dos 27 cancelamentos</li>
+        <li><strong>Sexta 23:</strong> Primeira análise de padrões (reunião 17h)</li>
+    </ul>
+
+    <h3 style="margin-top: 1.5em;">📊 Semana 2-4 (Maio completo)</h3>
+    <ul class="bullet-list">
+        <li>Consolidar motivos + reversibilidade</li>
+        <li>Testar 3 scripts de retenção (preço, upgrade, uso)</li>
+        <li>Medir taxa de reversão real</li>
+        <li>Montar relatório semanal automático</li>
+    </ul>
+
+    <div class="box-destaque" style="margin-top: 1.5em;">
+        <strong>Gate de sucesso:</strong> ≥20% dos próximos cancelamentos reverter em 30 dias
+    </div>
+</div>
+
+<!-- PÁGINA 12: DECISÃO FINAL -->
+<div class="page secao">
+    <h1>✅ Decisão Final</h1>
+
+    <div class="box-destaque" style="margin-bottom: 3em;">
+        <strong>Proposta de autoridade para Lucas:</strong><br><br>
+        1. Nomeação formal como "Dono de Customer Success"<br>
+        2. Autoridade para ofertar descontos até R$50/mês<br>
+        3. Acesso a dashboard de KPIs (atualizado diariamente)<br>
+        4. Reunião semanal com Rogério (segunda 9h — 15 min)<br>
+        5. Suporte: Mayko (consultor) + Rogério (sponsor)
+    </div>
+
+    <h3>Você aprova esta estrutura?</h3>
+
+    <div class="assinatura">
+        <div class="assinatura-bloco">
+            <p>Rogério Ferreira</p>
+            <p style="border-top: 1px solid #666; padding-top: 0.8em; margin-top: 1.5em;">
+                _________________<br>
+                <span class="assinatura-cargo">Sponsor / Dono</span>
+            </p>
+        </div>
+        <div class="assinatura-bloco">
+            <p>Lucas</p>
+            <p style="border-top: 1px solid #666; padding-top: 0.8em; margin-top: 1.5em;">
+                _________________<br>
+                <span class="assinatura-cargo">Customer Success</span>
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- PÁGINA 13: ENCERRAMENTO -->
+<div class="page" style="background: linear-gradient(135deg, #1987c3 0%, #0d4a8f 100%); color: white; justify-content: center; text-align: center;">
+    <div>
+        <h1 style="color: white; border: none; margin-bottom: 1em;">👋 Obrigado</h1>
+        <p style="font-size: 1.3em; margin-bottom: 2em;">Próximas ações documentadas e alinhadas</p>
+
+        <div style="background: rgba(255,255,255,0.1); padding: 2em; border-radius: 8px; margin-top: 2em;">
+            <p><strong>Dúvidas ou ajustes?</strong></p>
+            <p style="margin-top: 0.5em;">contato@sucessodetodos.com.br</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Gráfico Pizza - Distribuição
+    const ctxPizza = document.getElementById('chart-pizza');
+    if (ctxPizza) {
+        new Chart(ctxPizza, {
+            type: 'doughnut',
+            data: {
+                labels: ['Ativos', 'Inativos', 'Cancelados'],
+                datasets: [{
+                    data: [415, 1293, 27],
+                    backgroundColor: ['#2ecc71', '#f39c12', '#e74c3c'],
+                    borderColor: '#fff',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { padding: 20, font: { size: 14 } }
+                    }
+                }
+            }
+        });
+    }
+
+    // Gráfico Barras - Motivos
+    const ctxBarras = document.getElementById('chart-barras');
+    if (ctxBarras) {
+        new Chart(ctxBarras, {
+            type: 'bar',
+            data: {
+                labels: ['Mudança de cidade', 'Preço alto', 'Não usava', 'Atendimento', 'Outro'],
+                datasets: [
+                    {
+                        label: 'Reversível',
+                        data: [2, 8, 6, 4, 1],
+                        backgroundColor: '#2ecc71',
+                        borderRadius: 4
+                    },
+                    {
+                        label: 'Irreversível',
+                        data: [3, 0, 0, 2, 1],
+                        backgroundColor: '#e74c3c',
+                        borderRadius: 4
+                    }
+                ]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom', labels: { padding: 15, font: { size: 12 } } }
+                },
+                scales: { x: { stacked: true }, y: { stacked: true } }
+            }
+        });
+    }
+
+    // Gráfico Radar - KPIs
+    const ctxRadar = document.getElementById('chart-radar');
+    if (ctxRadar) {
+        new Chart(ctxRadar, {
+            type: 'radar',
+            data: {
+                labels: ['Atendimento (24h)', 'Taxa de Reversão', 'Documentação', 'Follow-up', 'Relatório Semanal'],
+                datasets: [{
+                    label: 'Performance Atual',
+                    data: [100, 45, 60, 40, 50],
+                    borderColor: '#1987c3',
+                    backgroundColor: 'rgba(25, 135, 195, 0.1)',
+                    borderWidth: 2,
+                    pointBackgroundColor: '#1987c3',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointRadius: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: { stepSize: 20 }
+                    }
+                },
+                plugins: {
+                    legend: { position: 'bottom', labels: { padding: 15, font: { size: 12 } } }
+                }
+            }
+        });
+    }
+</script>
+
+</body>
+</html>

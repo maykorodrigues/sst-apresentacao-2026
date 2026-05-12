@@ -1,0 +1,67 @@
+================================================================================
+                   APRESENTAÇÃO SST CARD - SETUP GITHUB PAGES
+                              INICÍO RÁPIDO (5 MIN)
+================================================================================
+
+✅ ETAPA 1: CRIAR REPOSITÓRIO NO GITHUB (2 min)
+
+1. Acesse: https://github.com/new
+2. Preenchear:
+   - Repository name: sst-apresentacao-2026
+   - Visibility: Public
+3. Clique: "Create repository"
+
+✅ ETAPA 2: FAZER PUSH (2 min)
+
+Abra PowerShell/Terminal e copie isso (substitua SEU-USUARIO):
+
+  cd C:\Users\mayko\meu-cerebro\01-projetos\consultoria-comercial\clientes\SST_Clinica_Bairro_da_Paz\lucas-cs
+  git branch -M main
+  git remote add origin https://github.com/SEU-USUARIO/sst-apresentacao-2026.git
+  git push -u origin main
+
+Se pedir senha, use seu Personal Access Token do GitHub.
+
+✅ ETAPA 3: ATIVAR GITHUB PAGES (1 min)
+
+1. Vá para seu repositório no GitHub
+2. Settings > Pages
+3. Source: main branch / root folder
+4. Save
+
+================================================================================
+
+📱 PRONTO! SUA APRESENTAÇÃO ESTARÁ AQUI:
+
+  https://SEU-USUARIO.github.io/sst-apresentacao-2026
+
+  EXEMPLO:
+  https://maykorodrigues.github.io/sst-apresentacao-2026
+
+================================================================================
+
+🎮 NAVEGAÇÃO NA APRESENTAÇÃO
+
+- Setas do teclado (← →): Navegar
+- Espaço: Próximo slide
+- Ctrl+P: Imprimir como PDF
+- Botões: Anterior/Próximo
+
+================================================================================
+
+📧 COMPARTILHAR COM ROGÉRIO
+
+Copie este link e compartilhe:
+
+  https://SEU-USUARIO.github.io/sst-apresentacao-2026
+
+================================================================================
+
+📋 ARQUIVO DE DOCUMENTAÇÃO COMPLETA
+
+Veja: GITHUB-SETUP.md para guia detalhado com troubleshooting
+
+================================================================================
+
+Dúvidas? Contato: contato@sucessodetodos.com.br
+Data: 12/05/2026

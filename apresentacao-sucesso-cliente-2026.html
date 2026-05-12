@@ -18,6 +18,86 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
+            padding-top: 120px;
+        }
+
+        .navbar-top {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            padding: 15px 20px;
+        }
+
+        .navbar-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .navbar-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #1987c3;
+            margin: 0;
+        }
+
+        .navbar-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .navbar-buttons .btn-nav {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            font-size: 0.9em;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .btn-download {
+            background: #2ecc71;
+            color: white;
+        }
+
+        .btn-download:hover {
+            background: #27ae60;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
+        }
+
+        .btn-github {
+            background: #333;
+            color: white;
+        }
+
+        .btn-github:hover {
+            background: #1a1a1a;
+            transform: translateY(-2px);
+        }
+
+        .btn-print {
+            background: #1987c3;
+            color: white;
+        }
+
+        .btn-print:hover {
+            background: #0d5a9e;
+            transform: translateY(-2px);
         }
 
         .slide {
@@ -336,6 +416,20 @@
         }
 
         @media (max-width: 768px) {
+            body {
+                padding-top: 180px;
+            }
+
+            .navbar-content {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .navbar-buttons {
+                width: 100%;
+                justify-content: flex-start;
+            }
+
             .slide {
                 padding: 25px;
                 min-height: auto;
@@ -400,6 +494,24 @@
     </style>
 </head>
 <body>
+    <!-- NAVBAR SUPERIOR -->
+    <div class="navbar-top">
+        <div class="navbar-content">
+            <h1 class="navbar-title">📊 SST Card — Sucesso do Cliente</h1>
+            <div class="navbar-buttons">
+                <a href="apresentacao-sucesso-cliente-2026.pdf" download class="btn-nav btn-download">
+                    📥 Download PDF
+                </a>
+                <a href="https://github.com/maykorodrigues/sst-apresentacao-2026" target="_blank" class="btn-nav btn-github">
+                    🔗 GitHub
+                </a>
+                <button class="btn-nav btn-print" onclick="window.print()">
+                    🖨️ Imprimir
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- SLIDE 1: CAPA -->
     <div class="slide capa active">
         <h1>🎯 SUCESSO DO CLIENTE</h1>
